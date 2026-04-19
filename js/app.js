@@ -1,4 +1,84 @@
+let currentControllerId = 'sc4500';
+let DATA = {};
 let stack = ['devices'];
+
+function initController() {
+  const select = document.getElementById('controller-select');
+  if (select) select.value = currentControllerId;
+  
+  DATA = buildControllerData(currentControllerId);
+  const controller = CONTROLLERS[currentControllerId];
+  if (controller) {
+    updateNavLabels();
+    renderInstruments();
+  }
+}
+
+function renderInstruments() {
+  const container = document.getElementById('instrument-list');
+  if (!container) return;
+  
+  const devices = getControllerDevices(currentControllerId);
+  let html = '';
+  
+  devices.forEach(d => {
+    const icon = d.type === 'ph' ? 'pH' : d.type === 'do' ? 'O₂' : 'T';
+    html += `<button class="inst-item" id="inst-${d.type}" onclick="selectInstrument('${d.type}')">
+      <span class="status-dot dot-ok"></span>${d.template.title}
+    </button>`;
+  });
+  
+  html += `<button class="inst-item" onclick="alert('Add an instrument via the Devices menu.')">
+    <span class="status-dot" style="background: var(--color-border-secondary);"></span>
+    <span style="color: var(--color-text-tertiary); font-size: 12px;">+ Add instrument</span>
+  </button>`;
+  
+  container.innerHTML = html;
+}
+
+function updateControllerPill(name) {
+  const pill = document.querySelector('.controller-pill');
+  if (pill) {
+    pill.innerHTML = `<span class="controller-dot"></span>${name}`;
+  }
+}
+
+function updateNavLabels() {
+  const mainMenu = CONTROLLERS[currentControllerId]?.mainMenu;
+  if (!mainMenu) return;
+  
+  const navMap = {
+    'nav-devices': 'devices',
+    'nav-notifications': 'notifications',
+    'nav-controller': 'controller',
+    'nav-outputs': 'outputs',
+    'nav-information': 'information'
+  };
+  
+  Object.keys(navMap).forEach(navId => {
+    const btn = document.getElementById(navId);
+    if (btn) {
+      const sectionKey = navMap[navId];
+      const label = getLabel(sectionKey, currentControllerId) || mainMenu[sectionKey]?.label || sectionKey;
+      const labelSpan = btn.querySelector('.nav-label-text');
+      if (labelSpan) {
+        labelSpan.textContent = label;
+      } else {
+        const textNode = Array.from(btn.childNodes).find(node => node.nodeType === Node.TEXT_NODE);
+        if (textNode) textNode.textContent = ' ' + label;
+      }
+    }
+  });
+}
+
+function switchController(controllerId) {
+  if (!CONTROLLERS[controllerId]) return;
+  currentControllerId = controllerId;
+  stack = ['devices'];
+  initController();
+  render();
+  setNavActive('devices');
+}
 
 function setNavActive(sectionId) {
   ['nav-devices','nav-notifications','nav-controller','nav-outputs','nav-information'].forEach(id => {
@@ -32,6 +112,27 @@ function goTo(idx) {
   render();
 }
 
+function getReadingData(type) {
+  const readingsMap = {
+    ph: [
+      { label:'pH', value:'7.24', unit:'pH', color:'#e6f1fb', tc:'#0C447C' },
+      { label:'ORP', value:'+185', unit:'mV', color:'#e1f5ee', tc:'#085041' },
+      { label:'Temperature', value:'23.1', unit:'°C', color:'#faeeda', tc:'#633806' }
+    ],
+    do: [
+      { label:'DO', value:'8.42', unit:'mg/L', color:'#e6f1fb', tc:'#0C447C' },
+      { label:'Temperature', value:'23.1', unit:'°C', color:'#faeeda', tc:'#633806' },
+      { label:'Saturation', value:'98.5', unit:'%', color:'#e1f5ee', tc:'#085041' }
+    ],
+    turbidity: [
+      { label:'Turbidity', value:'0.85', unit:'NTU', color:'#e6f1fb', tc:'#0C447C' },
+      { label:'Temperature', value:'23.1', unit:'°C', color:'#faeeda', tc:'#633806' },
+      { label:'Status', value:'OK', unit:'', color:'#e1f5ee', tc:'#085041' }
+    ]
+  };
+  return readingsMap[type] || readingsMap.ph;
+}
+
 function render() {
   const currentId = stack[stack.length - 1];
   const node = DATA[currentId];
@@ -55,11 +156,11 @@ function render() {
     html += `<div class="page-title">${node.title}</div>`;
     html += `<div class="page-desc" style="margin-top:4px;">Live sensor values (simulated for demo)</div>`;
     html += `<div class="detail-section" style="margin-top:12px;"><div class="detail-section-title">Current measurements</div>`;
-    const readings = [
-      { label:'pH', value:'7.24', unit:'pH', color:'#e6f1fb', tc:'#0C447C' },
-      { label:'ORP', value:'+185', unit:'mV', color:'#e1f5ee', tc:'#085041' },
-      { label:'Temperature', value:'23.1', unit:'°C', color:'#faeeda', tc:'#633806' }
-    ];
+    
+    const instrumentType = node.title.toLowerCase().includes('do') ? 'do' : 
+                          node.title.toLowerCase().includes('turbidity') ? 'turbidity' : 'ph';
+    const readings = getReadingData(instrumentType);
+    
     html += `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px;">`;
     readings.forEach(r => {
       html += `<div style="background:${r.color};border-radius:var(--border-radius-md);padding:12px;">
@@ -132,7 +233,9 @@ function doSearch(q) {
     }
     if (node.children) node.children.forEach(c => walk(c.id, fullTitle));
   }
-  ['devices','notifications','controller','outputs','information'].forEach(root => walk(root, ''));
+  
+  const mainMenuKeys = Object.keys(CONTROLLERS[currentControllerId]?.mainMenu || {});
+  mainMenuKeys.forEach(root => walk(root, ''));
 
   document.getElementById('breadcrumb').innerHTML = `<span class="bc-item current">Search: "${q}"</span>`;
   const content = document.getElementById('content');
@@ -153,16 +256,23 @@ function doSearch(q) {
 
 function navigateTo(id) {
   document.getElementById('search-input').value = '';
-  const pathMap = {
-    'ph-overview': ['devices','ph-overview'],
-    'ph-readings': ['devices','ph-overview','ph-readings'],
-    'ph-device-menu': ['devices','ph-overview','ph-device-menu'],
-    'ph-calibration': ['devices','ph-overview','ph-device-menu','ph-calibration'],
-    'ph-settings': ['devices','ph-overview','ph-device-menu','ph-settings'],
-    'ph-diagnostics': ['devices','ph-overview','ph-device-menu','ph-diagnostics'],
-    'ph-maintenance': ['devices','ph-overview','ph-maintenance'],
-    'ph-historical': ['devices','ph-overview','ph-historical']
-  };
+  
+  const devices = getControllerDevices(currentControllerId);
+  let pathMap = {};
+  
+  devices.forEach(d => {
+    const type = d.type;
+    const prefix = type + '-';
+    pathMap[type + '-overview'] = ['devices', type + '-overview'];
+    pathMap[prefix + 'readings'] = ['devices', type + '-overview', prefix + 'readings'];
+    pathMap[prefix + 'device-menu'] = ['devices', type + '-overview', prefix + 'device-menu'];
+    pathMap[prefix + 'calibration'] = ['devices', type + '-overview', prefix + 'device-menu', prefix + 'calibration'];
+    pathMap[prefix + 'settings'] = ['devices', type + '-overview', prefix + 'device-menu', prefix + 'settings'];
+    pathMap[prefix + 'diagnostics'] = ['devices', type + '-overview', prefix + 'device-menu', prefix + 'diagnostics'];
+    pathMap[prefix + 'maintenance'] = ['devices', type + '-overview', prefix + 'maintenance'];
+    pathMap[prefix + 'historical'] = ['devices', type + '-overview', prefix + 'historical'];
+  });
+  
   stack = pathMap[id] || [id.split('-')[0] || 'devices', id];
   render();
   setNavActive(stack[0]);
@@ -170,12 +280,21 @@ function navigateTo(id) {
 
 function selectInstrument(id) {
   document.querySelectorAll('.inst-item').forEach(el => el.classList.remove('active'));
-  document.getElementById('inst-ph')?.classList.add('active');
-  stack = ['devices','ph-overview'];
+  document.getElementById('inst-' + id)?.classList.add('active');
+  
+  const devices = getControllerDevices(currentControllerId);
+  const device = devices.find(d => d.type === id);
+  
+  if (device) {
+    stack = ['devices', device.assignment.id];
+  } else {
+    stack = ['devices'];
+  }
   render();
   setNavActive('devices');
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+  initController();
   render();
 });

@@ -53,9 +53,12 @@ body { font-family: var(--font-sans); background: var(--color-background-tertiar
 .app { display: flex; height: 580px; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); overflow: hidden; background: var(--color-background-primary); width: 100%; max-width: 860px; }
 .sidebar { width: 220px; border-right: 0.5px solid var(--color-border-tertiary); display: flex; flex-direction: column; background: var(--color-background-secondary); flex-shrink: 0; }
 .sidebar-header { padding: 14px 16px 10px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.app-title { font-size: 15px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px; }
 .sidebar-title { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.06em; }
 .controller-pill { display: inline-flex; align-items: center; gap: 6px; margin-top: 6px; padding: 4px 10px 4px 8px; background: var(--color-background-info); border-radius: 20px; font-size: 12px; font-weight: 500; color: var(--color-text-info); cursor: default; border: none; }
 .controller-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.controller-select { display: block; margin-top: 6px; padding: 4px 10px; background: var(--color-background-info); border: none; border-radius: 20px; font-size: 12px; font-weight: 500; color: var(--color-text-info); cursor: pointer; width: 100%; outline: none; }
+.controller-select:hover { background: var(--color-background-tertiary); }
 .nav-section { padding: 10px 8px 6px; border-bottom: 0.5px solid var(--color-border-tertiary); }
 .nav-label { font-size: 10px; font-weight: 500; color: var(--color-text-tertiary); padding: 0 8px 4px; text-transform: uppercase; letter-spacing: 0.06em; }
 .nav-item { display: flex; align-items: center; gap: 8px; padding: 7px 8px; border-radius: var(--border-radius-md); cursor: pointer; font-size: 13px; color: var(--color-text-primary); border: none; background: none; width: 100%; text-align: left; }

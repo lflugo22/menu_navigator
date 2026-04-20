@@ -9,9 +9,34 @@ function initController() {
   DATA = buildControllerData(currentControllerId);
   const controller = CONTROLLERS[currentControllerId];
   if (controller) {
+    renderMainNav();
     updateNavLabels();
     renderInstruments();
+    setNavActive('devices');
   }
+}
+
+function renderMainNav() {
+  const container = document.getElementById('main-nav-container');
+  const mainMenu = CONTROLLERS[currentControllerId]?.mainMenu;
+  if (!container || !mainMenu) return;
+
+  let html = '';
+  Object.keys(mainMenu).forEach(key => {
+    const item = mainMenu[key];
+    const iconHtml = item.icon
+      ? `<span class="nav-icon">${item.icon}</span>`
+      : '';
+    const badgeHtml = item.badge
+      ? `<span class="nav-badge">${item.badge}</span>`
+      : '';
+    html += `<button class="nav-item" id="nav-${key}" onclick="showSection('${key}')">
+      ${iconHtml}
+      <span class="nav-label-text">${item.label}</span>
+      ${badgeHtml}
+    </button>`;
+  });
+  container.innerHTML = html;
 }
 
 function renderInstruments() {
@@ -46,27 +71,13 @@ function updateControllerPill(name) {
 function updateNavLabels() {
   const mainMenu = CONTROLLERS[currentControllerId]?.mainMenu;
   if (!mainMenu) return;
-  
-  const navMap = {
-    'nav-devices': 'devices',
-    'nav-notifications': 'notifications',
-    'nav-controller': 'controller',
-    'nav-outputs': 'outputs',
-    'nav-information': 'information'
-  };
-  
-  Object.keys(navMap).forEach(navId => {
-    const btn = document.getElementById(navId);
+
+  Object.keys(mainMenu).forEach(key => {
+    const btn = document.getElementById('nav-' + key);
     if (btn) {
-      const sectionKey = navMap[navId];
-      const label = getLabel(sectionKey, currentControllerId) || mainMenu[sectionKey]?.label || sectionKey;
+      const label = mainMenu[key].label;
       const labelSpan = btn.querySelector('.nav-label-text');
-      if (labelSpan) {
-        labelSpan.textContent = label;
-      } else {
-        const textNode = Array.from(btn.childNodes).find(node => node.nodeType === Node.TEXT_NODE);
-        if (textNode) textNode.textContent = ' ' + label;
-      }
+      if (labelSpan) labelSpan.textContent = label;
     }
   });
 }
@@ -76,17 +87,21 @@ function switchController(controllerId) {
   currentControllerId = controllerId;
   stack = ['devices'];
   initController();
+  renderMainNav();
   render();
   setNavActive('devices');
 }
 
 function setNavActive(sectionId) {
-  ['nav-devices','nav-notifications','nav-controller','nav-outputs','nav-information'].forEach(id => {
-    const el = document.getElementById(id);
+  const mainMenu = CONTROLLERS[currentControllerId]?.mainMenu;
+  if (!mainMenu) return;
+
+  Object.keys(mainMenu).forEach(key => {
+    const el = document.getElementById('nav-' + key);
     if (el) el.classList.remove('active');
   });
-  const map = { devices:'nav-devices', notifications:'nav-notifications', controller:'nav-controller', outputs:'nav-outputs', information:'nav-information' };
-  if (map[sectionId]) { const el = document.getElementById(map[sectionId]); if (el) el.classList.add('active'); }
+  const el = document.getElementById('nav-' + sectionId);
+  if (el) el.classList.add('active');
 }
 
 function showSection(id) {

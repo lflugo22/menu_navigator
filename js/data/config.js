@@ -12,9 +12,7 @@ const DEVICE_ASSIGNMENTS = {
 
 const LABEL_OVERRIDES = {
   sc4500: {},
-  sc200: {
-    devices: "Sensors"
-  }
+  sc200: {}
 };
 
 function getLabel(key, controllerId) {

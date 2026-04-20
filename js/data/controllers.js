@@ -6,12 +6,15 @@ const CONTROLLERS = {
         id: "devices",
         label: "Devices",
         desc: "Connected sensors and analyzers. Select a device to view measurements, configure settings, and run calibrations.",
+        icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="8" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="1" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="8" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/></svg>',
         children: []
       },
       notifications: {
         id: "notifications",
         label: "Notifications",
         desc: "System messages, active alarms, and maintenance reminders.",
+        icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1.5a3.5 3.5 0 00-3.5 3.5v2.5L2 9h10l-1.5-1.5V5A3.5 3.5 0 007 1.5z" stroke="currentColor" stroke-width="1.2"/><path d="M5.5 9v.5a1.5 1.5 0 003 0V9" stroke="currentColor" stroke-width="1.2"/></svg>',
+        badge: 2,
         children: [
           { id: "notif-errors", label: "Errors", icon: "!", sub: "Active sensor and system errors", color: "#fcebeb" },
           { id: "notif-warnings", label: "Warnings", icon: "△", sub: "Calibration due, maintenance alerts", color: "#faeeda" },
@@ -22,6 +25,7 @@ const CONTROLLERS = {
         id: "controller",
         label: "Controller",
         desc: "SC4500 system settings — general configuration, connectivity, USB transfer, and service.",
+        icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.2"/><path d="M7 4v3l2 1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>',
         children: [
           { id: "ctrl-general", label: "General", icon: "G", sub: "Language, time, display, facility", color: "#e6f1fb" },
           { id: "ctrl-password", label: "Password", icon: "🔒", sub: "Access protection settings", color: "#eeedfe" },
@@ -35,6 +39,7 @@ const CONTROLLERS = {
         id: "outputs",
         label: "Outputs",
         desc: "Configure relays, analog outputs, and digital communication protocols.",
+        icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h8m0 0L7 4m3 3l-3 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M11.5 4v6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>',
         children: [
           { id: "out-hvrelay", label: "High voltage relay", icon: "⚡", sub: "2 SPDT relays — alarm, control, timer", color: "#faeeda" },
           { id: "out-lvrelay", label: "Low voltage relay", icon: "~", sub: "4 SPDT relays — optional module", color: "#eeedfe" },
@@ -51,6 +56,7 @@ const CONTROLLERS = {
         id: "information",
         label: "Information",
         desc: "Controller details, connected device information, and network status.",
+        icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.2"/><path d="M7 6v4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="7" cy="4" r="0.75" fill="currentColor"/></svg>',
         children: [
           { id: "info-controller", label: "Controller details", icon: "i", sub: "Serial, firmware, facility, location", color: "#e6f1fb" },
           { id: "info-devices", label: "SC devices details", icon: "◈", sub: "Connected device firmware and status", color: "#e1f5ee" },
@@ -67,26 +73,29 @@ const CONTROLLERS = {
   sc200: {
     name: "SC200",
     mainMenu: {
+      diagnostics: {
+        id: "diagnostics",
+        label: "Diagnostics",
+        desc: "Select the device (controller, sensor, network card) with the warning or error and push ENTER.",
+        icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1.5a3.5 3.5 0 00-3.5 3.5v2.5L2 9h10l-1.5-1.5V5A3.5 3.5 0 007 1.5z" stroke="currentColor" stroke-width="1.2"/><path d="M5.5 9v.5a1.5 1.5 0 003 0V9" stroke="currentColor" stroke-width="1.2"/></svg>',
+        children: [
+          { id: "diag-controller", label: "sc200", icon: "!", sub: "System errors and warnings", color: "#fcebeb" },
+          { id: "diag-sensor", label: "Sensors", icon: "!", sub: "Active sensor errors and warnings", color: "#fcebeb" },
+          { id: "diag-modules", label: "Modules", icon: "◷", sub: "Installed modules diagnostics", color: "#e6f1fb" }
+        ]
+      },
       devices: {
         id: "devices",
-        label: "Sensors",
+        label: "Sensor setup",
         desc: "Connected sensors and analyzers. Select a device to view measurements, configure settings, and run calibrations.",
+        icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="8" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="1" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="8" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/></svg>',
         children: []
-      },
-      notifications: {
-        id: "notifications",
-        label: "Notifications",
-        desc: "System messages, active alarms, and maintenance reminders.",
-        children: [
-          { id: "notif-errors", label: "Errors", icon: "!", sub: "Active sensor and system errors", color: "#fcebeb" },
-          { id: "notif-warnings", label: "Warnings", icon: "△", sub: "Calibration due, maintenance alerts", color: "#faeeda" },
-          { id: "notif-reminders", label: "Reminders", icon: "◷", sub: "Scheduled maintenance tasks", color: "#e6f1fb" }
-        ]
       },
       controller: {
         id: "controller",
-        label: "Controller",
+        label: "sc200 setup",
         desc: "SC200 system settings — general configuration and connectivity.",
+        icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.2"/><path d="M7 4v3l2 1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>',
         children: [
           { id: "ctrl-general", label: "General", icon: "G", sub: "Language, time, display", color: "#e6f1fb" },
           { id: "ctrl-password", label: "Password", icon: "🔒", sub: "Access protection settings", color: "#eeedfe" },
@@ -98,6 +107,7 @@ const CONTROLLERS = {
         id: "outputs",
         label: "Outputs",
         desc: "Configure relays and analog outputs.",
+        icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h8m0 0L7 4m3 3l-3 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M11.5 4v6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>',
         children: [
           { id: "out-relay", label: "Relays", icon: "⚡", sub: "Alarm and control relays", color: "#faeeda" },
           { id: "out-ma", label: "mA outputs", icon: "→", sub: "4–20 mA analog output", color: "#e1f5ee" },
@@ -108,6 +118,7 @@ const CONTROLLERS = {
         id: "information",
         label: "Information",
         desc: "Controller details and device information.",
+        icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.2"/><path d="M7 6v4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="7" cy="4" r="0.75" fill="currentColor"/></svg>',
         children: [
           { id: "info-controller", label: "Controller details", icon: "i", sub: "Serial, firmware", color: "#e6f1fb" },
           { id: "info-devices", label: "Device details", icon: "◈", sub: "Connected device info", color: "#e1f5ee" }

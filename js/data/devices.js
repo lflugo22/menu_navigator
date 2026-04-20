@@ -204,6 +204,30 @@ const DEVICE_TEMPLATES = {
 };
 
 const GLOBAL_PAGES = {
+  "diag-controller": {
+    title: "sc200  — Controller", type: "detail",
+    danger: "Address errors promptly. An active error can cause the controller to output a transfer value on analog outputs.",
+    settings: [
+      { name: "Errors", value: "Active system errors, Outputs on hold status. Errors cannot be acknowledged", path: "Diagnostics → sc200", tag: "optional" },
+      { name: "Warnings", value: "Active system warnings. Warnings can be acknowledged", path: "Diagnostics → sc200", tag: "optional" },
+    ]
+  },
+  "diag-sensor": {
+    title: "Sensor diagnostics", type: "detail",
+    danger: "Address errors promptly. An active error can cause the controller to output a transfer value on analog outputs.",
+    settings: [
+      { name: "Errors", value: "Active system errors. Errors cannot be acknowledged", path: "Diagnostics → Sensor", tag: "optional" },
+      { name: "Warnings", value: "Active system warnings. Warnings can be acknowledged", path: "Diagnostics → Sensor", tag: "optional" },
+    ]
+  },
+  "diag-modules": {
+    title: "Module diagnostics", type: "detail",
+    danger: "Address errors promptly. An active error can cause the controller to output a transfer value on analog outputs.",
+    settings: [
+      { name: "Errors", value: "Active system errors. Errors cannot be acknowledged", path: "Diagnostics → Module", tag: "optional" },
+      { name: "Warnings", value: "Active system warnings. Warnings can be acknowledged", path: "Diagnostics → Module", tag: "optional" },
+    ]
+  },
   "notif-errors": {
     title: "Errors", type: "detail",
     danger: "Address errors promptly. An active error can cause the controller to output a transfer value on analog outputs.",

@@ -203,9 +203,6 @@ function render() {
     html += `<div class="menu-grid">`;
     node.children.forEach(c => {
       html += `<div class="menu-card" onclick="navigate('${c.id}')">
-        <div class="menu-card-icon" style="background:${c.color||'var(--color-background-secondary)'};">
-          <span style="font-size:13px;color:var(--color-text-primary);">${c.icon}</span>
-        </div>
         <div class="menu-card-title">${c.label}</div>
         <div class="menu-card-sub">${c.sub}</div>
         <div class="menu-card-arrow">Open →</div>

@@ -204,6 +204,15 @@ const DEVICE_TEMPLATES = {
 };
 
 const GLOBAL_PAGES = {
+  "sc200-security": {
+    title: "Security setup — Controller settings", type: "detail",
+    note: "Password protects access to controller settings. Default password is 'SC200'. 1–6 characters, case-sensitive.",
+    settings: [
+      { name: "Set Passcode", value: "Enable or disable the passcode", path: "Settings Menu → sc200 setup > Security setup → Set Passcode", tag: "optional" },
+      { name: "Edit Passcode", value: "Use arrow keys to change the passcode", path: "Settings Menu → sc200 setup > Security setup → Change Passcode", tag: "optional" },
+      { name: "Protect Features", value: "This option is only displayed if an analyzer or sensor that supports this feature is connected to the controller.", path: "Settings Menu → sc200 setup > Security Setup > Protect Features", tag: "optional" }
+    ]
+  },
   "diag-controller": {
     title: "sc200  — Controller", type: "detail",
     danger: "Address errors promptly. An active error can cause the controller to output a transfer value on analog outputs.",

@@ -2,15 +2,13 @@ const DEVICE_TEMPLATES = {
   ph: {
     type: "sensor",
     title: "pH sensor",
-    description: "Connected on Channel 1. Live measurement and device menu.",
+    description: "Connected on Channel 1. Device menu for configuration and calibration.",
     children: [
-      { id: "ph-readings", label: "Live readings", icon: "~", sub: "Current pH, ORP, and temperature", color: "#e6f1fb" },
       { id: "ph-device-menu", label: "Device menu", icon: "≡", sub: "Configuration and calibration", color: "#faeeda" },
       { id: "ph-maintenance", label: "Maintenance", icon: "↺", sub: "Sensor maintenance tasks", color: "#eaf3de" },
       { id: "ph-historical", label: "Historical data", icon: "↗", sub: "View data log and trends", color: "#eeedfe" }
     ],
     pages: {
-      readings: { title: "Live readings — pH sensor", type: "readings" },
       "device-menu": {
         title: "Device menu — pH sensor",
         desc: "Configure sensor settings, run calibration, and manage sensor operation.",
@@ -77,13 +75,11 @@ const DEVICE_TEMPLATES = {
     title: "DO sensor",
     description: "Dissolved oxygen sensor.",
     children: [
-      { id: "do-readings", label: "Live readings", icon: "~", sub: "Current DO and temperature", color: "#e6f1fb" },
       { id: "do-device-menu", label: "Device menu", icon: "≡", sub: "Configuration and calibration", color: "#faeeda" },
       { id: "do-maintenance", label: "Maintenance", icon: "↺", sub: "Sensor maintenance tasks", color: "#eaf3de" },
       { id: "do-historical", label: "Historical data", icon: "↗", sub: "View data log and trends", color: "#eeedfe" }
     ],
     pages: {
-      readings: { title: "Live readings — DO sensor", type: "readings" },
       "device-menu": {
         title: "Device menu — DO sensor",
         desc: "Configure sensor settings, run calibration, and manage sensor operation.",
@@ -144,13 +140,11 @@ const DEVICE_TEMPLATES = {
     title: "Turbidity sensor",
     description: "Turbidity analyzer.",
     children: [
-      { id: "turb-readings", label: "Live readings", icon: "~", sub: "Current turbidity and status", color: "#e6f1fb" },
       { id: "turb-device-menu", label: "Device menu", icon: "≡", sub: "Configuration and calibration", color: "#faeeda" },
       { id: "turb-maintenance", label: "Maintenance", icon: "↺", sub: "Sensor maintenance tasks", color: "#eaf3de" },
       { id: "turb-historical", label: "Historical data", icon: "↗", sub: "View data log and trends", color: "#eeedfe" }
     ],
     pages: {
-      readings: { title: "Live readings — Turbidity sensor", type: "readings" },
       "device-menu": {
         title: "Device menu — Turbidity sensor",
         desc: "Configure sensor settings, run calibration, and manage sensor operation.",

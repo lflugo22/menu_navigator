@@ -127,27 +127,6 @@ function goTo(idx) {
   render();
 }
 
-function getReadingData(type) {
-  const readingsMap = {
-    ph: [
-      { label:'pH', value:'7.24', unit:'pH', color:'#e6f1fb', tc:'#0C447C' },
-      { label:'ORP', value:'+185', unit:'mV', color:'#e1f5ee', tc:'#085041' },
-      { label:'Temperature', value:'23.1', unit:'°C', color:'#faeeda', tc:'#633806' }
-    ],
-    do: [
-      { label:'DO', value:'8.42', unit:'mg/L', color:'#e6f1fb', tc:'#0C447C' },
-      { label:'Temperature', value:'23.1', unit:'°C', color:'#faeeda', tc:'#633806' },
-      { label:'Saturation', value:'98.5', unit:'%', color:'#e1f5ee', tc:'#085041' }
-    ],
-    turbidity: [
-      { label:'Turbidity', value:'0.85', unit:'NTU', color:'#e6f1fb', tc:'#0C447C' },
-      { label:'Temperature', value:'23.1', unit:'°C', color:'#faeeda', tc:'#633806' },
-      { label:'Status', value:'OK', unit:'', color:'#e1f5ee', tc:'#085041' }
-    ]
-  };
-  return readingsMap[type] || readingsMap.ph;
-}
-
 function render() {
   const currentId = stack[stack.length - 1];
   const node = DATA[currentId];
@@ -166,32 +145,6 @@ function render() {
   let html = '';
 
   if (stack.length > 1) html += `<button class="back-btn" onclick="goBack()">‹ Back</button>`;
-
-  if (node.type === 'readings') {
-    html += `<div class="page-title">${node.title}</div>`;
-    html += `<div class="page-desc" style="margin-top:4px;">Live sensor values (simulated for demo)</div>`;
-    html += `<div class="detail-section" style="margin-top:12px;"><div class="detail-section-title">Current measurements</div>`;
-    
-    const instrumentType = node.title.toLowerCase().includes('do') ? 'do' : 
-                          node.title.toLowerCase().includes('turbidity') ? 'turbidity' : 'ph';
-    const readings = getReadingData(instrumentType);
-    
-    html += `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px;">`;
-    readings.forEach(r => {
-      html += `<div style="background:${r.color};border-radius:var(--border-radius-md);padding:12px;">
-        <div style="font-size:11px;font-weight:500;color:${r.tc};opacity:0.7;margin-bottom:4px;">${r.label}</div>
-        <div style="font-size:22px;font-weight:500;color:${r.tc};">${r.value}</div>
-        <div style="font-size:11px;color:${r.tc};opacity:0.7;">${r.unit}</div>
-      </div>`;
-    });
-    html += `</div>`;
-    html += `<div class="setting-row"><span class="setting-name">Sensor status</span><span class="setting-value" style="color:#4caf50;">● OK</span></div>`;
-    html += `<div class="setting-row"><span class="setting-name">Last calibration</span><span class="setting-value">2025-03-12 09:41</span></div>`;
-    html += `<div class="setting-row"><span class="setting-name">Signal source</span><span class="setting-value">Channel 1 (digital SC)</span></div>`;
-    html += `</div>`;
-    content.innerHTML = html;
-    return;
-  }
 
   html += `<div class="page-title">${node.title}</div>`;
   if (node.desc) html += `<div class="page-desc">${node.desc}</div>`;
